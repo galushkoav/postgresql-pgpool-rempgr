@@ -8,7 +8,7 @@ chown -R postgres:postgres /var/lib/postgresql/.pgpass /var/lib/postgresql/.ssh
 su - postgres -c "psql --username=repmgr --dbname=repmgr --host node-psql01.example.com -w -l"
 
 #Replicate the DB from the master mode
-su - postgres -c "repmgr -D /var/lib/postgresql/9.3/data -d repmgr -p 5432 -U repmgr -R postgres --verbose standby clone node-psql01.example.com"
+su - postgres -c "repmgr -D /var/lib/postgresql/9.5/ -d repmgr -p 5432 -U repmgr -R postgres --verbose standby clone node-psql01.example.com"
 
 #Configure the repmgr
 touch /etc/postgresql-common/repmgr.conf
@@ -28,10 +28,6 @@ EOF
 
 chown -R postgres:postgres /etc/postgresql-common/repmgr.conf
 
-ssh root@node-psql01.example.com << EOF
-cd /etc/pki/CA
-openssl ca -passin pass:password123 -batch -in node-psql02.example.com.csr -out node-psql02.example.com.crt
-openssl x509 -noout -text -in node-psql02.example.com.crt > node-psql02.example.com.crt.info
 EOF
 /etc/init.d/postgresql restart
 

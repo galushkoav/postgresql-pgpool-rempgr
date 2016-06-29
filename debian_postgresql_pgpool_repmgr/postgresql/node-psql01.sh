@@ -18,14 +18,6 @@ sed -i.orig \
 -e "s/^#log_temp_files = -1/log_temp_files = 0/" \
 /etc/postgresql/9.5/main/postgresql.conf
 
-
-/var/lib/postgresql/9.5/main#
-/usr/lib/postgresql/9.5/bin#
-
-cd /etc/postgresql-common/
-
-
-
 cat >> /etc/postgresql/9.5/main/pg_hba.conf << EOF
 host    all             admin           0.0.0.0/0               md5
 host    all             all             10.1.9.0/24          md5
