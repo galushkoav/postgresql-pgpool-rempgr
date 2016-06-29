@@ -1,0 +1,55 @@
+root@server-3:/etc/ansible# cat install_postgres.yml 
+- hosts: 10.1.9.223 10.1.9.224
+  tasks:
+   - name: delete a directory /var/lib/postgresql
+     file:  path=/var/lib/postgresql  state=absent
+   - name: delete a directory /etc/postgresql
+     file:  path=/etc/postgresql  state=absent 
+
+   - name: add key 
+     apt_key: url=http://apt.postgresql.org/pub/repos/apt/ACCC4CF8.asc state=present
+   - name: Add Postgresql repo
+     apt_repository: repo='deb http://apt.postgresql.org/pub/repos/apt/ jessie-pgdg main' state=present
+
+   - name: Update apt cache
+     apt: update_cache=yes
+
+   - name: Install Poestgresl
+     apt: pkg={{ item }} 
+          state=present
+     with_items:
+       - postgresql-9.5
+       - postgresql-9.5-postgis-2.2
+       - postgresql-9.5-postgis-scripts
+       - zerofree
+       - pgdg-keyring
+       - postgresql-9.5-repmgr
+       - rsync
+       - ntp
+       - ntpdate
+       - xinetd
+       - git 
+       - iptables-persistent
+       - xtrabackup
+       - percona-toolkit
+       - python-psycopg2
+       - libpq-dev 
+       - repmgr
+   - service: name=xinetd state=restarted
+   - service: name=postgresql state=restarted
+   - name: Create postgresql conf files - postgesql/con
+     template: src=/etc/ansible/files/postgres/postgresql.conf dest=/etc/postgresql/9.5/main/postgresql.conf
+     notify:
+   - name: Create postgresql conf files - pg_hba
+     template: src=/etc/ansible/files/postgres/pg_hba.conf dest=/etc/postgresql/9.5/main/pg_hba.conf
+     notify:
+   - service: name=postgresql state=restarted
+
+
+- hosts: 10.1.9.223 10.1.9.224
+  sudo: yes
+  sudo_user: postgres
+
+  tasks:
+   - postgresql_user: db=postgres user=postgres password=youpass
+
