@@ -61,6 +61,7 @@ set -x
 exit 0;
 ) 2>&1 | tee -a /tmp/failover_stream.sh.log
 EOF
+
 chmod 755 /etc/pgpool2/failover_stream.sh
  
 cp /etc/pgpool2/pool_hba.conf.sample /etc/pgpool2/pool_hba.conf
@@ -70,7 +71,7 @@ mkdir -p /var/lib/postgresql/9.5/main
 groupadd -g 26 -o -r postgres
 useradd -M -n -g postgres -o -r -d /var/lib/postgresql/9.5/main -s /bin/bash -c "PostgreSQL Server" -u 26 postgres
  
-cp -R /root/.ssh /var/lib/postgresql/
+cp -Rr/root/.ssh /var/lib/postgresql/
 sed -i '/^User /d' /var/lib/postgresql/.ssh/config
 
 pg_md5 -m -u admin password123
@@ -78,6 +79,6 @@ pg_md5 -m -u admin password123
 chown -R postgres:postgres /var/lib/postgresql/ /etc/pgpool2/pool_passwd
  
 chmod 6755 /sbin/ifconfig
-chmod 6755 /sbin/arping
+chmod 6755 /usr/sbin/arping
  
 chkconfig pgpool-II-93 on
