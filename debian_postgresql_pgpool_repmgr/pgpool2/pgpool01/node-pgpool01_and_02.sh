@@ -78,6 +78,6 @@ pg_md5 -m -u admin password123
 chown -R postgres:postgres /var/lib/postgresql/ /etc/pgpool2/pool_passwd
  
 chmod 6755 /sbin/ifconfig
-chmod 6755 /sbin/arping
+chmod 6755 /usr/sbin/arping
  
 chkconfig pgpool-II-93 on
