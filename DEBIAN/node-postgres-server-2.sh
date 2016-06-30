@@ -1,9 +1,14 @@
-echo 'PATH=/usr/lib/postgresql/9.5/bin:$PATH' >> /var/lib/postgresql/.bash_profile
+#!/bin/bash
+echo'PATH=/usr/lib/postgresql/9.5/bin:$PATH' >> /var/lib/postgresql/.bash_profile
 
-scp -r node-psql01.example.com:/root/{.pgpass,.ssh} /root/
-cp -r /root/{.pgpass,.ssh} /var/lib/postgresql/
-chown -R postgres:postgres /var/lib/postgresql/.pgpass /var/lib/postgresql/.ssh
- 
+for SERVER in node1-psql01 node-psql02 node-pgpool-ha node-pgpool01 node-pgpool02; do
+  echo "$SERVER.example.com:5432:postgres:admin:password123" >> ~/.pgpass
+  echo "$SERVER.example.com:5432:repmgr:repmgr:repmgr_password" >> ~/.pgpass
+done 
+chmod 0600 ~/.pgpass
+cp ~/.pgpass /var/lib/postgresql/
+chown -R -v postgres:postgres /var/lib/postgresql/.pgpass
+
 #Check the connection to primary node
 su - postgres -c "psql --username=repmgr --dbname=repmgr --host node-psql01.example.com -w -l"
 
