@@ -61,7 +61,7 @@ EOF
 chown -R postgres:postgres /var/lib/postgresql/
  
 echo 'PATH=/usr/lib/postgresql/9.5/bin:$PATH' >> /var/lib/postgresql/.bash_profile
-service postgresql start 
+/etc/init.d/postgresql restart
 
 #Add users
 sudo -u postgres psql -c "CREATE ROLE admin SUPERUSER CREATEDB CREATEROLE INHERIT REPLICATION LOGIN ENCRYPTED PASSWORD 'password123';"
