@@ -35,10 +35,12 @@ for SERVER in node1-psql01 node-psql02 node-pgpool-ha node-pgpool01 node-pgpool0
   echo "$SERVER.example.com:5432:repmgr:repmgr:repmgr_password" >> ~/.pgpass
 done 
 chmod 0600 ~/.pgpass
-cp ~/.pgpass /var/lib/pgsql/
+cp ~/.pgpass /var/lib/postgresql/
+chown postgres:postgres /var/lib/postgresql/.pgpass
 
 #Configure repmgr
 mkdir /var/lib/postgresql/repmgr
+rm /etc/postgresql-common/repmgr.conf
 touch /etc/postgresql-common/repmgr.conf
 cat > /etc/postgresql-common/repmgr.conf << EOF
 cluster=pgsql_cluster
@@ -54,8 +56,8 @@ promote_command='/usr/lib/postgresql/9.5/bin/repmgr standby promote -f /etc/post
 follow_command='/usr/lib/postgresql/9.5/bin/repmgr standby follow -f /etc/postgresql-common/repmgr.conf'
 EOF
  
-cp -r /root/.ssh /var/lib/postgresql/
-chown -R postgres:postgres /var/lib/postgresql/.ssh /var/lib/postgresql/.pgpass /var/lib/postgresql/repmgr
+
+chown -R postgres:postgres /var/lib/postgresql/
  
 echo 'PATH=/usr/lib/postgresql/9.5/bin:$PATH' >> /var/lib/postgresql/.bash_profile
 service postgresql start 
@@ -68,4 +70,4 @@ sudo -u postgres psql -c "CREATE DATABASE repmgr OWNER repmgr;"
 #Register DB instance as master
 su - postgres -c "repmgr -f /etc/postgresql-common/repmgr.conf --verbose master register"
 
-echo "Настройте соединие по ssh между нодами без пароля"
+echo "Настройте соединие по ssh между нодами без пароля для user'a - postgresq"
