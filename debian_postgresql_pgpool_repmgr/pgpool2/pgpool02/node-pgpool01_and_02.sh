@@ -1,4 +1,6 @@
-cp /etc/pgpool2/pcp.conf.sample /etc/pgpool2/pcp.conf
+apt purge pgpool2 -y
+rm -r /etc/pgpool2
+apt-get install pgpool2 -y
 echo "admin:`pg_md5 password123`" >> /etc/pgpool2/pcp.conf
 
 sed \
@@ -39,7 +41,7 @@ sed \
 -e "s/^log_per_node_statement = off/log_per_node_statement = on/" \
 -e "s/^log_standby_delay = 'none'/log_standby_delay = 'always'/" \
 -e "s/^enable_pool_hba = off/enable_pool_hba = on/" \
-/etc/pgpool2/pgpool.conf.sample > /etc/pgpool2/pgpool.conf
+/etc/pgpool2/pgpool.conf
 
 cat > /etc/pgpool2/failover_stream.sh << \EOF
 #!/bin/sh
@@ -64,12 +66,11 @@ EOF
 
 chmod 755 /etc/pgpool2/failover_stream.sh
  
-cp /etc/pgpool2/pool_hba.conf.sample /etc/pgpool2/pool_hba.conf
 echo "host    all         all         0.0.0.0/0             md5" >> /etc/pgpool2/pool_hba.conf
  
 mkdir -p /var/lib/postgresql/9.5/main
 groupadd -g 26 -o -r postgres
-useradd -M -n -g postgres -o -r -d /var/lib/postgresql/9.5/main -s /bin/bash -c "PostgreSQL Server" -u 26 postgres
+useradd -M -g postgres -o -r -d /var/lib/postgresql/9.5/main -s /bin/bash -c "PostgreSQL Server" -u 26 postgres
  
 cp -Rr/root/.ssh /var/lib/postgresql/
 sed -i '/^User /d' /var/lib/postgresql/.ssh/config
@@ -81,4 +82,3 @@ chown -R postgres:postgres /var/lib/postgresql/ /etc/pgpool2/pool_passwd
 chmod 6755 /sbin/ifconfig
 chmod 6755 /usr/sbin/arping
  
-chkconfig pgpool-II-93 on

@@ -3,4 +3,4 @@ sed \
 -e "s/^heartbeat_destination0 =.*/heartbeat_destination0 = 'node-pgpool02.example.com'/" \
 -e "s/^#other_pgpool_hostname0 =.*/other_pgpool_hostname0 = 'node-pgpool02.example.com'/" \
 -i /etc/pgpool2/pgpool.conf
-/etc/init.d/pgpoo2 restart
+/etc/init.d/pgpool2 restart
