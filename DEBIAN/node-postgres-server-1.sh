@@ -2,6 +2,7 @@
 rm /var/lib/postgresql/.pgpass
 rm /root/.pgpass
 rm /var/lib/postgresql/repmgr/repmgr.conf
+rm /etc/postgresql-common/repmgr.conf
 sed -i.orig \
 -e "s/^#listen_addresses = 'localhost'/listen_addresses = '*'/" \
 -e "s/^#shared_preload_libraries = ''/shared_preload_libraries = 'repmgr_funcs'/" \
@@ -59,8 +60,7 @@ failover=manual
 promote_command='/usr/lib/postgresql/9.5/bin/repmgr standby promote -f /etc/postgresql-common/repmgr.conf'
 follow_command='/usr/lib/postgresql/9.5/bin/repmgr standby follow -f /etc/postgresql-common/repmgr.conf'
 EOF
- 
-
+cp /etc/postgresql-common/repmgr.conf /var/lib/postgresql/repmgr/repmgr.conf 
 chown -R postgres:postgres /var/lib/postgresql/
  
 echo 'PATH=/usr/lib/postgresql/9.5/bin:$PATH' >> /var/lib/postgresql/.bash_profile
