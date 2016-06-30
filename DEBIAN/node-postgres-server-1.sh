@@ -32,8 +32,8 @@ host    replication     repmgr          10.1.9.224/32        trust
 EOF
  
 for SERVER in node1-psql01 node-psql02 node-pgpool-ha node-pgpool01 node-pgpool02; do
-  echo "$SERVER.example.com:5432:postgres:admin:password123" >> ~/.pgpass
-  echo "$SERVER.example.com:5432:repmgr:repmgr:repmgr_password" >> ~/.pgpass
+  echo "$SERVER.example.local:5432:postgres:admin:password123" >> ~/.pgpass
+  echo "$SERVER.example.local:5432:repmgr:repmgr:repmgr_password" >> ~/.pgpass
 done 
 chmod 0600 ~/.pgpass
 cp ~/.pgpass /var/lib/postgresql/
