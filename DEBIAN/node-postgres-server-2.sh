@@ -1,5 +1,6 @@
 #!/bin/bash
 rm /var/lib/postgresql/.pgpass
+rm /var/lib/postgresql/repmgr/repmgr.conf   
 rm /root/.pgpass
 echo'PATH=/usr/lib/postgresql/9.5/bin:$PATH' >> /var/lib/postgresql/.bash_profile
 
