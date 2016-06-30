@@ -44,12 +44,6 @@ sed -i.orig \
 -e "s/^enable_pool_hba = off/enable_pool_hba = on/" \
 /etc/pgpool2/pgpool.conf
 
-sed -i.orig \
--e "s/^10.1.9.221= .localhost./10.1.9.221 node-pgpool01.example.com" \
--e "s/^10.1.9.221= .localhost./10.1.9.222 node-pgpool02.example.com" \
--e "s/^log_destination = .stderr./log_destination = 'syslog'/"  \
-/etc/hosts
-
 
 cat > /etc/pgpool2/failover_stream.sh << \EOF
 #!/bin/sh
@@ -95,5 +89,6 @@ sed -i.orig \
 -e "s/^heartbeat_destination0 =.*/heartbeat_destination0 = 'node-pgpool01.example.com'/" \
 -e "s/^#other_pgpool_hostname0 =.*/other_pgpool_hostname0 = 'node-pgpool01.example.com'/" \
 /etc/pgpool2/pgpool.conf
+
 /etc/init.d/pgpool2 start
 

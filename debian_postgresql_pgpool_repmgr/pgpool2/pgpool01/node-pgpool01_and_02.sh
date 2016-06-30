@@ -23,7 +23,7 @@ sed -i.orig \
 -e "s/^health_check_user =.*/health_check_user = 'admin'/" \
 -e "s/^health_check_password =.*/health_check_password = 'password123'/" \
 -e "s/^use_watchdog =.*/use_watchdog = on/" \
--e "s/^delegate_IP =.*/delegate_IP = '10.1.9.250'/" \
+-e "s/^delegate_IP =.*/delegate_IP = '10.1.9.230'/" \
 -e "s/^netmask 255.255.255.0/netmask 255.255.255.128/" \
 -e "s/^heartbeat_device0 =.*/heartbeat_device0 = 'eth0'/" \
 -e "s/^#other_pgpool_port0 =.*/other_pgpool_port0 = 5432/" \
