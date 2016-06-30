@@ -1,4 +1,6 @@
 #!/bin/bash
+rm /var/lib/postgresql/.pgpass
+rm /root/.pgpass
 echo'PATH=/usr/lib/postgresql/9.5/bin:$PATH' >> /var/lib/postgresql/.bash_profile
 
 for SERVER in node1-psql01 node-psql02 node-pgpool-ha node-pgpool01 node-pgpool02; do
