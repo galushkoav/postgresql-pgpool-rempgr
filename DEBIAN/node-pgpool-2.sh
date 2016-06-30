@@ -69,7 +69,7 @@ EOF
 chmod 755 /etc/pgpool2/failover_stream.sh
  
 echo "host    all         all         0.0.0.0/0             md5" >> /etc/pgpool2/pool_hba.conf
- 
+
 mkdir -p /var/lib/postgresql/9.5/main
 groupadd -g 26 -o -r postgres
 useradd -M -g postgres -o -r -d /var/lib/postgresql/9.5/main -s /bin/bash -c "PostgreSQL Server" -u 26 postgres
@@ -89,6 +89,7 @@ sed -i.orig \
 -e "s/^heartbeat_destination0 =.*/heartbeat_destination0 = 'node-pgpool01.example.com'/" \
 -e "s/^#other_pgpool_hostname0 =.*/other_pgpool_hostname0 = 'node-pgpool01.example.com'/" \
 /etc/pgpool2/pgpool.conf
+
 
 /etc/init.d/pgpool2 start
 
