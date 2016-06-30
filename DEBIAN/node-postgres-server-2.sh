@@ -2,8 +2,8 @@
 echo'PATH=/usr/lib/postgresql/9.5/bin:$PATH' >> /var/lib/postgresql/.bash_profile
 
 for SERVER in node1-psql01 node-psql02 node-pgpool-ha node-pgpool01 node-pgpool02; do
-  echo "$SERVER.example.com:5432:postgres:admin:password123" >> ~/.pgpass
-  echo "$SERVER.example.com:5432:repmgr:repmgr:repmgr_password" >> ~/.pgpass
+  echo "$SERVER.example.local:5432:postgres:admin:password123" >> ~/.pgpass
+  echo "$SERVER.example.local:5432:repmgr:repmgr:repmgr_password" >> ~/.pgpass
 done 
 chmod 0600 ~/.pgpass
 cp ~/.pgpass /var/lib/postgresql/
