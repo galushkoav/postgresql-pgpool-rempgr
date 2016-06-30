@@ -1,9 +1,10 @@
+#!/bin/bash
 apt purge pgpool2 -y
 rm -r /etc/pgpool2
 apt-get install pgpool2
 echo "admin:`pg_md5 password123`" >> /etc/pgpool2/pcp.conf
 
-sed \
+sed -i.orig \
 -e "s/^listen_addresses = .localhost./listen_addresses = '*'/" \
 -e "s/^log_destination = .stderr./log_destination = 'syslog'/" \
 -e "s/^port = .*/port = 5432/" \
@@ -43,6 +44,14 @@ sed \
 -e "s/^enable_pool_hba = off/enable_pool_hba = on/" \
 /etc/pgpool2/pgpool.conf
 
+
+sed -i.orig \
+-e "s/^10.1.9.221= .localhost./10.1.9.221 node-pgpool01.example.com" \
+-e "s/^10.1.9.221= .localhost./10.1.9.222 node-pgpool02.example.com" \
+-e "s/^log_destination = .stderr./log_destination = 'syslog'/"  \
+/etc/hosts
+
+
 cat > /etc/pgpool2/failover_stream.sh << \EOF
 #!/bin/sh
 # Failover command for streaming replication.
@@ -80,3 +89,11 @@ chown -R postgres:postgres /var/lib/postgresql/ /etc/pgpool2/pool_passwd
  
 chmod 6755 /sbin/ifconfig
 chmod 6755 /usr/sbin/arping
+
+sed -i.orig \
+-e "s/^wd_hostname =.*/wd_hostname = 'node-pgpool01.example.com'/" \
+-e "s/^heartbeat_destination0 =.*/heartbeat_destination0 = 'node-pgpool02.example.com'/" \
+-e "s/^#other_pgpool_hostname0 =.*/other_pgpool_hostname0 = 'node-pgpool02.example.com'/" \
+-i /etc/pgpool2/pgpool.conf
+/etc/init.d/pgpool2 restart
+
