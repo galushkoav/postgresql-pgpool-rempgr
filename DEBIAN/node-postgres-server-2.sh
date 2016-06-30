@@ -12,10 +12,10 @@ cp ~/.pgpass /var/lib/postgresql/
 chown -R -v postgres:postgres /var/lib/postgresql/.pgpass
 
 #Check the connection to primary node
-su - postgres -c "psql --username=repmgr --dbname=repmgr --host node-psql01.example.com -w -l"
+su - postgres -c "psql --username=repmgr --dbname=repmgr --host node-psql01.example.local -w -l"
 
 #Replicate the DB from the master mode
-su - postgres -c "repmgr -D /var/lib/postgresql/9.5/ -d repmgr -p 5432 -U repmgr -R postgres --verbose standby clone node-psql01.example.com"
+su - postgres -c "repmgr -D /var/lib/postgresql/9.5/ -d repmgr -p 5432 -U repmgr -R postgres --verbose standby clone node-psql01.example.local"
 
 #Configure the repmgr
 touch /etc/postgresql-common/repmgr.conf
