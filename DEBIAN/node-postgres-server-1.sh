@@ -49,7 +49,7 @@ cat > /etc/postgresql-common/repmgr.conf << EOF
 cluster=pgsql_cluster
 node=1
 node_name=node-psql01
-conninfo='host=node-psql01.example.com user=repmgr dbname=repmgr'
+conninfo='host=node-psql01.example.local user=repmgr dbname=repmgr'
 pg_bindir=/usr/lib/postgresql/9.5/bin
 master_response_timeout=5
 reconnect_attempts=2
