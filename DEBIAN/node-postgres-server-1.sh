@@ -1,4 +1,6 @@
 #!/bin/bash
+rm /var/lib/postgresql/.pgpass
+rm /root/.pgpass
 sed -i.orig \
 -e "s/^#listen_addresses = 'localhost'/listen_addresses = '*'/" \
 -e "s/^#shared_preload_libraries = ''/shared_preload_libraries = 'repmgr_funcs'/" \
