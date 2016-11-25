@@ -1,0 +1,3 @@
+"user_remote" "pass"
+"postgres" "pass"
+"pgbouncer" "fake"

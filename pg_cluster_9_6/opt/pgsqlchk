@@ -1,0 +1,56 @@
+#!/bin/bash
+# /opt/pgsqlchk 
+# This script checks if a postgres server is healthy running on localhost. It will
+# return:
+#
+# "HTTP/1.x 200 OK\r" (if postgres is running smoothly)
+#
+# - OR -
+#
+# "HTTP/1.x 500 Internal Server Error\r" (else)
+#
+# The purpose of this script is make haproxy capable of monitoring postgres properly
+#
+#
+# It is recommended that a low-privileged postgres  user is created to be used by
+# this script.
+# For eg. create  user pgsqlchkusr login password 'pg321';
+#
+ 
+PGSQL_HOST="localhost"
+PGSQL_PORT="5433"
+PGSQL_DATABASE="template1"
+PGSQL_USERNAME="postgres"
+export PGPASSWORD="password"
+  
+TMP_FILE="/tmp/pgsqlchk.out"
+ERR_FILE="/tmp/pgsqlchk.err"
+ 
+  
+#
+# We perform a simple query that should return a few results :-p
+#
+psql -h $PGSQL_HOST -p $PGSQL_PORT -U $PGSQL_USERNAME \
+     $PGSQL_DATABASE -c "show port;" > $TMP_FILE 2> $ERR_FILE
+  
+#
+# Check the output. If it is not empty then everything is fine and we return
+# something. Else, we just do not return anything.
+#
+if [ "$(/bin/cat $TMP_FILE)" != "" ]
+then
+    # Postgres is fine, return http 200
+    /bin/echo -e "HTTP/1.1 200 OK\r\n"
+    /bin/echo -e "Content-Type: Content-Type: text/plain\r\n"
+    /bin/echo -e "\r\n"
+    /bin/echo -e "Postgres is running.\r\n"
+    /bin/echo -e "\r\n"
+else
+    # Postgres is down, return http 503
+    /bin/echo -e "HTTP/1.1 503 Service Unavailable\r\n"
+    /bin/echo -e "Content-Type: Content-Type: text/plain\r\n"
+    /bin/echo -e "\r\n"
+    /bin/echo -e "Postgres is *down*.\r\n"
+    /bin/echo -e "\r\n"
+fi
+
